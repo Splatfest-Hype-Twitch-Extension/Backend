@@ -10,7 +10,7 @@ RUN npm ci
 
 COPY . .
 
-RUN npm build
+RUN npm run build
 
 FROM node:slim
 
@@ -25,7 +25,7 @@ COPY package*.json ./
 
 RUN npm ci --production
 
-COPY --from=builder /usr/src/app/dist ./dist
+COPY --from=builder /usr/src/app ./dist
 
 EXPOSE 80
 CMD [ "node", "dist/index.js" ]
