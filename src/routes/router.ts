@@ -72,25 +72,10 @@ router.post("/click", (req: Request, res: Response) => {
   res.status(200).send();
 
   channel.click(clickcount);
-
-  channel.clients.forEach(client => {
-    client.response.write(`data: ${JSON.stringify({ counter: channel?.counter })}\n\n`);
-  });
 });
 
 router.post("/reset", (req: Request, res: Response) => {
-  var clickcount = req.body.clickcount;
   const channelid: string = req.params.channelid;
-
-  if (!clickcount || isNaN(clickcount)) {
-    res.status(400).send("Invalid request");
-    return;
-  }
-
-  if (clickcount < 0) {
-    res.status(400).send("clickcount should be positive");
-    return;
-  }
 
   var channel = channels.find(channel => channel.channelid === channelid);
   if (!channel) return res.status(404).send("Channel not found");
@@ -98,10 +83,6 @@ router.post("/reset", (req: Request, res: Response) => {
   res.status(200).send();
 
   channel.reset();
-
-  channel.clients.forEach(client => {
-    client.response.write(`data: ${JSON.stringify({ counter: channel?.counter })}\n\n`);
-  });
 });
 
 export default router;
